@@ -2,7 +2,7 @@
   <section class="main">
     <div class="menu">
       <div class="logo">我想学摄影</div>
-      <el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" router>
+      <el-menu :default-active="$route.path" class="el-menu-vertical-demo" router>
         <el-menu-item index="/dashBoard">
           <i class="el-icon-menu"></i>
           <span slot="title">数据统计</span>
@@ -15,6 +15,7 @@
           <el-menu-item-group>
             <el-menu-item index="/articleList">文章列表</el-menu-item>
             <el-menu-item index="/articleAdd">添加文章</el-menu-item>
+            <el-menu-item index="/articleAsync">从同步公众号</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="/dailyAdd">

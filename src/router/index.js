@@ -4,6 +4,7 @@ import Router from "vue-router";
 Vue.use(Router);
 
 export default new Router({
+  mode: "history",
   routes: [
     {
       path: "/login",
@@ -49,6 +50,14 @@ export default new Router({
           name: "edit",
           meta: {
             title: "编辑文章"
+          }
+        },
+        {
+          path: "articleAsync",
+          component: () => import("@/views/articleAsync"),
+          name: "edit",
+          meta: {
+            title: "从公众号同步文章"
           }
         },
         {

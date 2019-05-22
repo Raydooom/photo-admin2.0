@@ -160,6 +160,22 @@ export const addArticle = params => {
     });
 };
 
+// 从公众号同步文章
+export const asyncArticle = params => {
+  let config = {
+    url: "/admin/tools/asyncWechatArticle",
+    method: "POST",
+    data: params
+  };
+  return http(config)
+    .then(res => {
+      return res.data;
+    })
+    .catch(err => {
+      return err;
+    });
+};
+
 // 获取关于开发者
 export const editAboutDeveloper = params => {
   let config = {

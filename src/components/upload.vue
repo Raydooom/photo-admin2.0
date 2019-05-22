@@ -42,11 +42,11 @@ export default {
       this.imageUrl = windowURL.createObjectURL(file);
     },
     uploadOnSuccess(res) {
-      let imageUrl = `${process.env.HOST}${res.data}`;
+      let imageUrl = `https://server.raydom.wang${res.data}`;
       this.$emit("upLoadImg", imageUrl);
     },
     httprequest() {},
-    // handleChange(file) {}
+    handleChange() {}
   }
 };
 </script>
