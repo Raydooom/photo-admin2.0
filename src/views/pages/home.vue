@@ -49,7 +49,7 @@
   </section>
 </template>
 <script>
-import topBar from "../components/topBar";
+import topBar from "@/components/topbar";
 
 export default {
   components: {

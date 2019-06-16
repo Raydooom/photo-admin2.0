@@ -1,11 +1,11 @@
 <template>
   <section>
     <div class="main-container">
-      <el-form ref="form" :model="formData" :rules="rules" label-position="right" label-width="100px">
+      <el-form ref="form" :model="formData" :rules="rules" label-position="right" label-width="140px">
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="文章标题" prop="title">
-              <el-input v-model="formData.title" placeholder="请输入内容" clearable maxlength="30"></el-input>
+          <el-col :span="20">
+            <el-form-item label="公众号文章链接" prop="url">
+              <el-input v-model="formData.url" placeholder="文章链接" clearable></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -40,14 +40,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="24">
-            <el-form-item label="文章内容">
-              <quill-editor @getContent="getContent" :articleContent="formData.content"></quill-editor>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-button type="primary" round @click="publish">发布</el-button>
+          <el-button type="primary" round @click="publish">同步文章</el-button>
           <el-button round>取消</el-button>
         </el-row>
       </el-form>
@@ -55,50 +48,26 @@
   </section>
 </template>
 <script>
-import quillEditor from "../components/quillEditor"; //调用编辑器
-import upload from "../components/upload";
-import { getKindList, addArticle, updateArticle, getArticle } from "@/api//";
+import upload from "@/components/upload";
+import { getKindList, asyncArticle } from "@/api//";
 export default {
   data() {
     return {
       kindList: "",
       formData: {
-        title: "",
+        url: "",
         coverUrl: "",
         kindId: 1,
-        kindName: "",
         homeShow: false,
-        description: "",
-        content: ""
+        description: ""
       },
       rules: {
-        title: [{ required: true, message: "标题不能为空" }]
+        url: [{ required: true, message: "公众号文章链接" }]
       }
     };
   },
-  props: ["id"],
   components: {
-    quillEditor,
     upload
-  },
-  watch: {
-    id() {
-      let params = { id: this.id };
-      getArticle(params).then(res => {
-        if (res.errno == 0) {
-          this.formData.title = res.data.article_title;
-          this.formData.kindId = res.data.kind_id;
-          this.formData.homeShow = Boolean(res.data.home_show);
-          this.formData.description = res.data.description;
-          this.formData.content = res.data.content;
-          this.formData.coverUrl = res.data.cover_img;
-          this.formData.content = res.data.content;
-        } else {
-          this.$message.error("获取详情失败");
-          this.$router.go(-1);
-        }
-      });
-    }
   },
   methods: {
     // 获取分类
@@ -109,12 +78,9 @@ export default {
         })
         .catch(() => {});
     },
-    // 获取富文本框内容
-    getContent(data) {
-      this.formData.content = data;
-    },
     // 获取封面图片路径
     getCoverUrl(data) {
+      console.log(data)
       this.formData.coverUrl = data;
     },
     // 发布文章
@@ -122,29 +88,19 @@ export default {
       this.$refs["form"].validate(validate => {
         if (validate) {
           let params = {
-            id: this.id,
-            title: this.formData.title,
+            url: this.formData.url,
             coverUrl: this.formData.coverUrl,
             kind: this.formData.kindId,
             description: this.formData.description,
-            content: this.formData.content,
             homeShow: this.formData.homeShow ? "1" : "0"
           };
-          if (!this.id) {
-            addArticle(params).then(res => {
-              if (res.errno == 0) {
-                this.$message.success(res.errmsg);
-              }
-            });
-            this.$router.go(-1);
-          } else {
-            updateArticle(params).then(res => {
-              if (res.errno == 0) {
-                this.$message.success(res.errmsg);
-                this.$router.go(-1);
-              }
-            });
-          }
+          console.log(params)
+          asyncArticle(params).then(res => {
+            if (res.errno == 0) {
+              this.$message.success(res.errmsg);
+              this.$router.go(-1);
+            }
+          });
         }
       });
     }

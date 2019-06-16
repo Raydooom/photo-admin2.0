@@ -1,11 +1,9 @@
 <template>
-  <div style="padding-top:20px;">
-    <article-body :id="id"></article-body>
-  </div>
+  <article-body :id="id"></article-body>
 </template>
 
 <script>
-import articleBody from "./articleBody";
+import articleBody from "./articleAdd";
 export default {
   data() {
     return {

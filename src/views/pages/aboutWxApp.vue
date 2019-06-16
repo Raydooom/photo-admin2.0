@@ -25,7 +25,7 @@
   </section>
 </template>
 <script>
-import quillEditor from "../components/quillEditor"; //调用编辑器
+import quillEditor from "@/components/quillEditor"; //调用编辑器
 import { editAboutDeveloper, getAboutDeveloper } from "@/api//";
 export default {
   data() {

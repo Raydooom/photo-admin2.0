@@ -1,5 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
+import layout from "@/views/layout/index";
+import childrenView from "@/views/layout/childrenView";
 
 Vue.use(Router);
 
@@ -8,83 +10,114 @@ export default new Router({
   routes: [
     {
       path: "/login",
-      component: () => import("@/views/login")
+      component: () => import("@/views/pages/login")
     },
     {
       path: "/",
       name: "home",
-      component: () => import("@/views/home"),
+      redirect: "/dashBoard",
+      component: layout,
       children: [
         {
-          path: "dashBoard",
-          component: () => import("@/views/dashBoard"),
+          path: "/dashBoard",
+          component: () => import("@/views/pages/dashBoard"),
+          isMenu: true,
           meta: {
             title: "数据统计"
           }
         },
         {
-          path: "articleList",
-          component: () => import("@/views/articleList"),
+          path: "/articleModule",
+          component: childrenView,
+          redirect: "/articleAdd",
+          isMenu: true,
           meta: {
-            title: "文章列表"
-          }
+            title: "文章管理"
+          },
+          children: [
+            {
+              path: "/articleList",
+              isMenu: true,
+              component: () => import("@/views/pages/article/articleList"),
+              meta: {
+                title: "文章列表"
+              }
+            },
+            {
+              path: "/articleAdd",
+              component: () => import("@/views/pages/article/articleAdd"),
+              isMenu: true,
+              meta: {
+                title: "添加文章"
+              }
+            },
+            {
+              path: "/preview/:id",
+              component: () => import("@/views/pages/article/articleView"),
+              name: "articleView",
+              meta: {
+                title: "预览文章"
+              }
+            },
+            {
+              path: "/edit/:id",
+              component: () => import("@/views/pages/article/articleEdit"),
+              name: "edit",
+              meta: {
+                title: "编辑文章"
+              }
+            },
+            {
+              path: "/articleAsync",
+              component: () => import("@/views/pages/article/articleAsync"),
+              isMenu: true,
+              name: "edit",
+              meta: {
+                title: "从公众号同步文章"
+              }
+            }
+          ]
         },
         {
-          path: "articleAdd",
-          component: () => import("@/views/articleAdd"),
+          path: "/dailyModule",
+          component: childrenView,
+          redirect: "/dailyList",
+          isMenu: true,
           meta: {
-            title: "添加文章"
-          }
+            title: "文章管理"
+          },
+          children: [
+            {
+              path: "/dailyList",
+              component: () => import("@/views/pages/daily/list"),
+              isMenu: true,
+              meta: {
+                title: "每日精选"
+              }
+            },
+            {
+              path: "/dailyAdd",
+              component: () => import("@/views/pages/daily/add"),
+              isMenu: true,
+              meta: {
+                title: "添加精选"
+              }
+            },
+            {
+              path: "/dailyEdit/:id",
+              component: () => import("@/views/pages/daily/edit"),
+              meta: {
+                title: "添加精选"
+              }
+            }
+          ]
         },
-        {
-          path: "preview/:id",
-          component: () => import("@/views/articleView"),
-          name: "articleView",
-          meta: {
-            title: "预览文章"
-          }
-        },
-        {
-          path: "edit/:id",
-          component: () => import("@/views/articleEdit"),
-          name: "edit",
-          meta: {
-            title: "编辑文章"
-          }
-        },
-        {
-          path: "articleAsync",
-          component: () => import("@/views/articleAsync"),
-          name: "edit",
-          meta: {
-            title: "从公众号同步文章"
-          }
-        },
-        {
-          path: "dailyList",
-          component: () => import("@/views/daily/list"),
-          meta: {
-            title: "每日精选"
-          }
-        },
-        {
-          path: "dailyAdd",
-          component: () => import("@/views/daily/add"),
-          meta: {
-            title: "添加精选"
-          }
-        },
-        {
-          path: "dailyEdit/:id",
-          component: () => import("@/views/daily/edit"),
-          meta: {
-            title: "添加精选"
-          }
-        },
+
         {
           path: "/aboutDeveloper",
           name: "aboutDeveloper",
-          component: () => import("@/views/aboutDeveloper"),
+          component: () => import("@/views/pages/aboutDeveloper"),
+          isMenu: true,
           meta: {
             title: "关于开发者"
           }
@@ -92,7 +125,8 @@ export default new Router({
         {
           path: "/aboutWxApp",
           name: "aboutWxApp",
-          component: () => import("@/views/aboutWxApp"),
+          component: () => import("@/views/pages/aboutWxApp"),
+          isMenu: true,
           meta: {
             title: "关于小程序"
           }
@@ -102,7 +136,7 @@ export default new Router({
     {
       path: "*",
       name: "errorPage",
-      component: () => import("@/views/errorPage")
+      component: () => import("@/views/pages/errorPage")
     }
   ]
 });

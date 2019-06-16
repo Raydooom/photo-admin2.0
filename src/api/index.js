@@ -304,6 +304,22 @@ export const getDashBoardData = params => {
     });
 };
 
+// 数据统计页面
+export const getServerInfo = params => {
+  let config = {
+    url: "/admin/dashBoard/getServerInfo",
+    method: "POST",
+    data: params
+  };
+  return http(config)
+    .then(res => {
+      return res.data;
+    })
+    .catch(err => {
+      return err;
+    });
+};
+
 // 每日访客
 export const getDailyVisitor = params => {
   let config = {

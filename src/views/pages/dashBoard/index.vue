@@ -6,21 +6,32 @@
       <badge class="badge" icon="el-icon-tickets" color="#99CCFF" name="总评论" :count="baseData.commentCount"></badge>
       <badge class="badge" icon="el-icon-tickets" color="#99CCFF" name="精选" :count="baseData.dailyCount"></badge>
     </div>
+    <!-- <div class="badge-wrap">
+      <badge class="badge" icon="el-icon-tickets" color="#66CCCC" name="文章数" :count="baseData.articleCount"></badge>
+      <badge class="badge" icon="el-icon-tickets" color="#99CCFF" name="用户数" :count="baseData.userCount"></badge>
+      <badge class="badge" icon="el-icon-tickets" color="#99CCFF" name="总评论" :count="baseData.commentCount"></badge>
+      <badge class="badge" icon="el-icon-tickets" color="#99CCFF" name="精选" :count="baseData.dailyCount"></badge>
+    </div> -->
     <div class="item-wrap">
       <div class="chart-wrap">
         <v-chart :options="line"/>
+      </div>
+      <div class="chart-wrap">
+        <v-chart :options="gauge"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import badge from "../components/chartBadge";
+import badge from "@/components/chartBadge";
 import ECharts from "vue-echarts/components/ECharts";
 import "echarts/lib/component/title";
 import "echarts/lib/component/legend";
 import "echarts/lib/chart/line";
-import { getDashBoardData, getDailyVisitor } from "@/api/";
+import "echarts/lib/chart/gauge";
+
+import { getDashBoardData, getDailyVisitor, getServerInfo } from "@/api/";
 export default {
   components: {
     "v-chart": ECharts,
@@ -79,13 +90,36 @@ export default {
         },
         series: [],
         color: ["#CCCCFF"]
+      },
+      gauge: {
+        tooltip: {
+          formatter: "{a} <br/>{b} : {c}%"
+        },
+        series: [
+          {
+            name: "cpu使用率",
+            type: "gauge",
+            detail: { formatter: "{value}%" },
+            data: [{ value: 0, name: "使用率" }]
+          }
+        ]
       }
     };
   },
   mounted() {
     this.getData();
+    // setInterval(() => {
+    //   this.getServerInfo();
+    // }, 5000);
   },
   methods: {
+    getServerInfo() {
+      getServerInfo().then(res => {
+        const osInfo = res.data;
+        this.gauge.series[0].data[0].value =
+          ((osInfo.freemem / osInfo.totalmem) * 100).toFixed(2);
+      });
+    },
     getData() {
       // 基本数据
       getDashBoardData().then(res => {

@@ -1,7 +1,7 @@
 <template>
   <div class="login-wrap">
     <div class="left">
-      <img src="../assets/images/login.jpg">
+      <img src="../../assets/images/login.jpg">
     </div>
     <div class="right">
       <h2>管理系统登录</h2>
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { getKey, login } from "../api";
+import { getKey, login } from "@/api";
 import { aesEncrypt } from "@/utils";
 
 export default {
